@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aloqa Formasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        blue: '#1C4CA3',
+                        green: '#34C759',
+                        dark: '#1A1A1A'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: linear-gradient(135deg, #f7f9fc 0%, #eef2f7 100%);
+        }
+        
+        .form-container {
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .input-field:focus {
+            box-shadow: 0 0 0 3px rgba(28, 76, 163, 0.2);
+        }
+        
+        .header-bg {
+            background: linear-gradient(90deg, #1C4CA3 0%, #1e5799 100%);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(90deg, #1C4CA3 0%, #34C759 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            background: linear-gradient(90deg, #183b86 0%, #2db84f 100%);
+            transform: translateY(-2px);
+        }
+        
+        .phone-prefix {
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .phone-input {
+            padding-left: 90px !important;
+        }
+        
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .submit-success {
+            animation: success 0.5s ease;
+        }
+        
+        @keyframes success {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="form-container w-full max-w-3xl bg-white/90">
+        <!-- Header -->
+        <div class="header-bg text-white py-6 px-8 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2 flex items-center justify-center">
+                <i class="fas fa-envelope-open-text mr-3"></i> Aloqa Formasi
+            </h1>
+            <p class="opacity-90">Formani to'ldiring va biz tez orada siz bilan bog'lanamiz</p>
+        </div>
+        
+        <!-- Form Section -->
+        <form id="contactForm" class="p-6 md:p-8">
+            <!-- Name Surname -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label for="firstName" class="block text-gray-700 font-medium mb-2">Ism</label>
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="firstName" 
+                            name="firstName"
+                            placeholder="Ismingizni kiriting" 
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 input-field focus:outline-none focus:border-blue-500 transition-colors"
+                            required
+                        >
+                        <div class="absolute right-3 top-3.5 text-gray-400">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="lastName" class="block text-gray-700 font-medium mb-2">Familiya</label>
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="lastName" 
+                            name="lastName"
+                            placeholder="Familiyangizni kiriting" 
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 input-field focus:outline-none focus:border-blue-500 transition-colors"
+                            required
+                        >
+                        <div class="absolute right-3 top-3.5 text-gray-400">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Province Selection -->
+            <div class="mb-6">
+                <label for="province" class="block text-gray-700 font-medium mb-2">Viloyat</label>
+                <div class="relative">
+                    <select 
+                        id="province" 
+                        name="province"
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 input-field focus:outline-none focus:border-blue-500 appearance-none transition-colors"
+                        required
+                    >
+                        <option value="" disabled selected>Viloyatingizni tanlang</option>
+                        <option value="Toshkent">Toshkent shahri</option>
+                        <option value="Toshkent_v">Toshkent viloyati</option>
+                        <option value="Andijon">Andijon viloyati</option>
+                        <option value="Buxoro">Buxoro viloyati</option>
+                        <option value="Fargona">Farg'ona viloyati</option>
+                        <option value="Jizzax">Jizzax viloyati</option>
+                        <option value="Xorazm">Xorazm viloyati</option>
+                        <option value="Namangan">Namangan viloyati</option>
+                        <option value="Navoiy">Navoiy viloyati</option>
+                        <option value="Qashqadaryo">Qashqadaryo viloyati</option>
+                        <option value="Qoraqalpogiston">Qoraqalpog'iston Respublikasi</option>
+                        <option value="Samarqand">Samarqand viloyati</option>
+                        <option value="Sirdaryo">Sirdaryo viloyati</option>
+                        <option value="Surxondaryo">Surxondaryo viloyati</option>
+                    </select>
+                    <div class="absolute right-3 top-3.5 text-gray-400 pointer-events-none">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Phone Number -->
+            <div class="mb-6">
+                <label for="phone" class="block text-gray-700 font-medium mb-2">Telefon raqam</label>
+                <div class="relative">
+                    <span class="phone-prefix absolute left-4 text-gray-700 font-medium">+998</span>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone"
+                        placeholder="XX XXX XX XX" 
+                        class="w-full px-4 py-3 phone-input rounded-lg border border-gray-300 input-field focus:outline-none focus:border-blue-500 transition-colors"
+                        minlength="9"
+                        maxlength="9"
+                        required
+                    >
+                </div>
+                <p class="mt-1 text-sm text-gray-500">Iltimos, telefon raqamingizni 9 xonali shaklda kiriting</p>
+            </div>
+            
+            <!-- Comment -->
+            <div class="mb-6">
+                <label for="comment" class="block text-gray-700 font-medium mb-2">Izoh</label>
+                <textarea 
+                    id="comment" 
+                    name="comment"
+                    rows="4" 
+                    placeholder="Iltimos, izoh qoldiring..." 
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 input-field focus:outline-none focus:border-blue-500 transition-colors resize-none"
+                ></textarea>
+            </div>
+            
+            <!-- Submit Button -->
+            <button 
+                type="submit" 
+                id="submitBtn"
+                class="w-full py-4 px-6 rounded-lg text-white font-semibold btn-gradient hover:shadow-lg transition-all flex items-center justify-center"
+            >
+                <span>Ma'lumotlarni yuborish</span>
+            </button>
+            
+            <!-- Form Status -->
+            <div id="formStatus" class="mt-4 text-center"></div>
+        </form>
+        
+        <!-- Footer -->
+        <div class="bg-gray-50/50 py-4 px-6 text-center border-t border-gray-200">
+            <p class="text-gray-600 text-sm">© 2025 Aloqa Formasi. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full text-center submit-success">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-check-circle text-green-500 text-4xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Muvaffaqiyatli yuborildi!</h3>
+            <p class="text-gray-600 mb-6">Sizning ma'lumotlaringiz qabul qilindi. Tez orada siz bilan bog'lanamiz.</p>
+            <button 
+                id="closeModal" 
+                class="bg-blue-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-600 transition-colors"
+            >
+                Tushunarli
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const formStatus = document.getElementById('formStatus');
+            
+            // Button holatini o'zgartirish
+            submitBtn.innerHTML = '<span>Yuborilmoqda...</span> <i class="fas fa-circle-notch animate-spin ml-2"></i>';
+            submitBtn.disabled = true;
+            
+            formStatus.innerHTML = '';
+            formStatus.classList.remove('text-red-500', 'text-green-500');
+            
+            // Form ma'lumotlarini olish
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Telefon raqamini tekshirish
+            if (data.phone.length !== 9 || isNaN(data.phone)) {
+                formStatus.innerHTML = 'Iltimos, telefon raqamingizni to\'g\'ri formatda kiriting (9 ta raqam)';
+                formStatus.classList.add('text-red-500');
+                
+                submitBtn.innerHTML = '<span>Ma\'lumotlarni yuborish</span>';
+                submitBtn.disabled = false;
+                
+                document.getElementById('phone').focus();
+                return;
+            }
+            
+            try {
+                // Serverga ma'lumotlarni yuborish
+                const response = await fetch('/api/contacts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Muvaffaqiyatli modal ko'rsatish
+                    document.getElementById('successModal').classList.remove('hidden');
+                    
+                    // Formani tozalash
+                    this.reset();
+                } else {
+                    // Xatolik xabarini ko'rsatish
+                    formStatus.innerHTML = result.message || 'Xatolik yuz berdi';
+                    formStatus.classList.add('text-red-500');
+                }
+                
+            } catch (error) {
+                console.error('Xatolik:', error);
+                formStatus.innerHTML = 'Server bilan bog\'lanishda xatolik yuz berdi';
+                formStatus.classList.add('text-red-500');
+            }
+            
+            // Button holatini qaytarish
+            submitBtn.innerHTML = '<span>Ma\'lumotlarni yuborish</span>';
+            submitBtn.disabled = false;
+        });
+        
+        // Modal yopish
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('successModal').classList.add('hidden');
+        });
+        
+        // Modal tashqarisiga bosganda yopish
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+        
+        // Telefon raqami uchun faqat raqamlar
+        document.getElementById('phone').addEventListener('input', function(e) {
+            const value = e.target.value;
+            const newValue = value.replace(/\D/g, '');
+            e.target.value = newValue;
+        });
+    </script>
+</body>
+</html>

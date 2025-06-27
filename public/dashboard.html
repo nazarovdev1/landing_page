@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Kontaktlar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar {
+            transition: all 0.3s;
+        }
+        .contact-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: absolute;
+                z-index: 50;
+                height: 100vh;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+        .status-new { background-color: #fef3c7; color: #92400e; }
+        .status-contacted { background-color: #dbeafe; color: #1e40af; }
+        .status-completed { background-color: #d1fae5; color: #065f46; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="sidebar bg-indigo-800 text-white w-64 flex-shrink-0">
+            <div class="p-4 flex items-center justify-between border-b border-indigo-700">
+                <h1 class="text-xl font-bold">Admin Panel</h1>
+                <button id="sidebarClose" class="md:hidden">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="p-4">
+                <ul>
+                    <li class="mb-2">
+                        <a href="#" class="flex items-center p-2 rounded hover:bg-indigo-700">
+                            <i class="fas fa-tachometer-alt mr-3"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="flex items-center p-2 rounded bg-indigo-700">
+                            <i class="fas fa-address-book mr-3"></i>
+                            Kontaktlar
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="flex items-center p-2 rounded hover:bg-indigo-700">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            Statistika
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="flex items-center p-2 rounded hover:bg-indigo-700">
+                            <i class="fas fa-cog mr-3"></i>
+                            Sozlamalar
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="bg-white shadow-sm">
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center">
+                        <button id="sidebarToggle" class="md:hidden mr-4">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <h2 class="text-lg font-semibold">Kontaktlar Boshqaruvi</h2>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <i class="fas fa-bell text-gray-500"></i>
+                            <span id="notificationBadge" class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 hidden"></span>
+                        </div>
+                        <div class="flex items-center">
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff" alt="Profile" class="h-8 w-8 rounded-full">
+                            <span class="ml-2">Admin</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-y-auto p-4 md:p-6">
+                <!-- Statistics Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="p-2 bg-blue-100 rounded-lg">
+                                <i class="fas fa-users text-blue-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-600">Jami kontaktlar</p>
+                                <p id="totalContacts" class="text-2xl font-bold">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="p-2 bg-yellow-100 rounded-lg">
+                                <i class="fas fa-clock text-yellow-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-600">Yangi</p>
+                                <p id="newContacts" class="text-2xl font-bold">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="p-2 bg-blue-100 rounded-lg">
+                                <i class="fas fa-phone text-blue-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-600">Bog'lanilgan</p>
+                                <p id="contactedContacts" class="text-2xl font-bold">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="p-2 bg-green-100 rounded-lg">
+                                <i class="fas fa-check text-green-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-600">Tugallangan</p>
+                                <p id="completedContacts" class="text-2xl font-bold">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contacts List -->
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="p-4 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold">Kontaktlar ro'yxati</h3>
+                            <div class="flex space-x-2">
+                                <button id="refreshBtn" class="p-2 rounded-full hover:bg-gray-100" title="Yangilash">
+                                    <i class="fas fa-sync-alt text-gray-500"></i>
+                                </button>
+                                <button class="p-2 rounded-full hover:bg-gray-100" title="Filter">
+                                    <i class="fas fa-filter text-gray-500"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="contactsContainer" class="divide-y divide-gray-200">
+                        <!-- Kontaktlar bu yerga qo'shiladi -->
+                        <div id="loadingMessage" class="p-8 text-center text-gray-500">
+                            <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                            <p>Ma'lumotlar yuklanmoqda...</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        let contacts = [];
+
+        // Sidebar toggle
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarClose = document.getElementById('sidebarClose');
+        const sidebar = document.querySelector('.sidebar');
+
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.add('open');
+        });
+
+        sidebarClose.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+        });
+
+        // Kontaktlarni yuklash
+        async function loadContacts() {
+            try {
+                const response = await fetch('/api/contacts');
+                const result = await response.json();
+                
+                if (result.success) {
+                    contacts = result.data;
+                    displayContacts();
+                    updateStatistics();
+                } else {
+                    showError('Ma\'lumotlarni yuklashda xatolik');
+                }
+            } catch (error) {
+                console.error('Xatolik:', error);
+                showError('Server bilan bog\'lanishda xatolik');
+            }
+        }
+
+        // Kontaktlarni ko'rsatish
+        function displayContacts() {
+            const container = document.getElementById('contactsContainer');
+            const loadingMessage = document.getElementById('loadingMessage');
+            
+            if (loadingMessage) {
+                loadingMessage.remove();
+            }
+
+            if (contacts.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-gray-500">
+                        <i class="fas fa-inbox text-4xl mb-4"></i>
+                        <p>Hozircha kontaktlar yo'q</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = contacts.map(contact => `
+                <div class="p-4 contact-card transition duration-200" data-id="${contact.id}">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-start">
+                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(contact.firstName + ' ' + contact.lastName)}&background=random" 
+                                 alt="User" class="h-12 w-12 rounded-full mr-4">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <h4 class="font-medium text-lg">${contact.firstName} ${contact.lastName}</h4>
+                                    <span class="ml-2 px-2 py-1 text-xs rounded-full status-${contact.status}">
+                                        ${getStatusText(contact.status)}
+                                    </span>
+                                </div>
+                                <div class="text-sm text-gray-600 space-y-1">
+                                    <p><i class="fas fa-map-marker-alt mr-2"></i>${contact.province}</p>
+                                    <p><i class="fas fa-phone mr-2"></i>${contact.phone}</p>
+                                    <p><i class="fas fa-calendar mr-2"></i>${formatDate(contact.createdAt)}</p>
+                                    ${contact.comment ? `<p><i class="fas fa-comment mr-2"></i>${contact.comment}</p>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col space-y-2">
+                            <select class="status-select text-sm border rounded px-2 py-1" data-id="${contact.id}">
+                                <option value="new" ${contact.status === 'new' ? 'selected' : ''}>Yangi</option>
+                                <option value="contacted" ${contact.status === 'contacted' ? 'selected' : ''}>Bog'lanilgan</option>
+                                <option value="completed" ${contact.status === 'completed' ? 'selected' : ''}>Tugallangan</option>
+                            </select>
+                            <button class="delete-btn text-red-600 text-sm hover:bg-red-50 px-2 py-1 rounded" data-id="${contact.id}">
+                                <i class="fas fa-trash"></i> O'chirish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Event listeners qo'shish
+            addEventListeners();
+        }
+
+        // Event listeners qo'shish
+        function addEventListeners() {
+            // Status o'zgartirish
+            document.querySelectorAll('.status-select').forEach(select => {
+                select.addEventListener('change', async (e) => {
+                    const contactId = e.target.dataset.id;
+                    const newStatus = e.target.value;
+                    await updateContactStatus(contactId, newStatus);
+                });
+            });
+
+            // Kontaktni o'chirish
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const contactId = e.target.closest('.delete-btn').dataset.id;
+                    if (confirm('Bu kontaktni o\'chirishni xohlaysizmi?')) {
+                        await deleteContact(contactId);
+                    }
+                });
+            });
+        }
+
+        // Status matnini olish
+        function getStatusText(status) {
+            const statusTexts = {
+                'new': 'Yangi',
+                'contacted': 'Bog\'lanilgan',
+                'completed': 'Tugallangan'
+            };
+            return statusTexts[status] || status;
+        }
+
+        // Sanani formatlash
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('uz-UZ') + ' ' + date.toLocaleTimeString('uz-UZ', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+        }
+
+        // Statistikani yangilash
+        function updateStatistics() {
+            const total = contacts.length;
+            const newCount = contacts.filter(c => c.status === 'new').length;
+            const contactedCount = contacts.filter(c => c.status === 'contacted').length;
+            const completedCount = contacts.filter(c => c.status === 'completed').length;
+
+            document.getElementById('totalContacts').textContent = total;
+            document.getElementById('newContacts').textContent = newCount;
+            document.getElementById('contactedContacts').textContent = contactedCount;
+            document.getElementById('completedContacts').textContent = completedCount;
+
+            // Yangi kontaktlar uchun notification
+            const notificationBadge = document.getElementById('notificationBadge');
+            if (newCount > 0) {
+                notificationBadge.classList.remove('hidden');
+            } else {
+                notificationBadge.classList.add('hidden');
+            }
+        }
+
+        // Kontakt statusini yangilash
+        async function updateContactStatus(contactId, status) {
+            try {
+                const response = await fetch(`/api/contacts/${contactId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Local ma'lumotlarni yangilash
+                    const contactIndex = contacts.findIndex(c => c.id === contactId);
+                    if (contactIndex !== -1) {
+                        contacts[contactIndex].status = status;
+                        displayContacts();
+                        updateStatistics();
+                    }
+                } else {
+                    showError('Status yangilashda xatolik');
+                }
+            } catch (error) {
+                console.error('Xatolik:', error);
+                showError('Server bilan bog\'lanishda xatolik');
+            }
+        }
+
+        // Kontaktni o'chirish
+        async function deleteContact(contactId) {
+            try {
+                const response = await fetch(`/api/contacts/${contactId}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Local ma'lumotlardan o'chirish
+                    contacts = contacts.filter(c => c.id !== contactId);
+                    displayContacts();
+                    updateStatistics();
+                } else {
+                    showError('Kontaktni o\'chirishda xatolik');
+                }
+            } catch (error) {
+                console.error('Xatolik:', error);
+                showError('Server bilan bog\'lanishda xatolik');
+            }
+        }
+
+        // Xatolik xabarini ko'rsatish
+        function showError(message) {
+            // Bu yerda toast notification yoki modal ko'rsatish mumkin
+            alert(message);
+        }
+
+        // Yangilash tugmasi
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+            loadContacts();
+        });
+
+        // Sahifa yuklanganda kontaktlarni yuklash
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContacts();
+            
+            // Har 30 soniyada avtomatik yangilash
+            setInterval(loadContacts, 30000);
+        });
+    </script>
+</body>
+</html>
