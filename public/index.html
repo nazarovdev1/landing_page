@@ -231,23 +231,15 @@
     
     <script>
         document.getElementById('contactForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
+            e.preventDefault();           
             const submitBtn = document.getElementById('submitBtn');
             const formStatus = document.getElementById('formStatus');
-            
-            // Button holatini o'zgartirish
             submitBtn.innerHTML = '<span>Yuborilmoqda...</span> <i class="fas fa-circle-notch animate-spin ml-2"></i>';
             submitBtn.disabled = true;
-            
             formStatus.innerHTML = '';
             formStatus.classList.remove('text-red-500', 'text-green-500');
-            
-            // Form ma'lumotlarini olish
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
-            
-            // Telefon raqamini tekshirish
             if (data.phone.length !== 9 || isNaN(data.phone)) {
                 formStatus.innerHTML = 'Iltimos, telefon raqamingizni to\'g\'ri formatda kiriting (9 ta raqam)';
                 formStatus.classList.add('text-red-500');
@@ -260,7 +252,6 @@
             }
             
             try {
-                // Serverga ma'lumotlarni yuborish
                 const response = await fetch('/api/contacts', {
                     method: 'POST',
                     headers: {
@@ -272,13 +263,10 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    // Muvaffaqiyatli modal ko'rsatish
                     document.getElementById('successModal').classList.remove('hidden');
                     
-                    // Formani tozalash
                     this.reset();
                 } else {
-                    // Xatolik xabarini ko'rsatish
                     formStatus.innerHTML = result.message || 'Xatolik yuz berdi';
                     formStatus.classList.add('text-red-500');
                 }
@@ -289,24 +277,17 @@
                 formStatus.classList.add('text-red-500');
             }
             
-            // Button holatini qaytarish
             submitBtn.innerHTML = '<span>Ma\'lumotlarni yuborish</span>';
             submitBtn.disabled = false;
         });
-        
-        // Modal yopish
         document.getElementById('closeModal').addEventListener('click', function() {
             document.getElementById('successModal').classList.add('hidden');
-        });
-        
-        // Modal tashqarisiga bosganda yopish
+        }); 
         document.getElementById('successModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 this.classList.add('hidden');
             }
         });
-        
-        // Telefon raqami uchun faqat raqamlar
         document.getElementById('phone').addEventListener('input', function(e) {
             const value = e.target.value;
             const newValue = value.replace(/\D/g, '');

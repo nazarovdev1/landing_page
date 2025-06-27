@@ -173,12 +173,9 @@
 
     <script>
         let contacts = [];
-
-        // Sidebar toggle
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebarClose = document.getElementById('sidebarClose');
         const sidebar = document.querySelector('.sidebar');
-
         sidebarToggle.addEventListener('click', () => {
             sidebar.classList.add('open');
         });
@@ -186,8 +183,6 @@
         sidebarClose.addEventListener('click', () => {
             sidebar.classList.remove('open');
         });
-
-        // Kontaktlarni yuklash
         async function loadContacts() {
             try {
                 const response = await fetch('/api/contacts');
@@ -205,8 +200,6 @@
                 showError('Server bilan bog\'lanishda xatolik');
             }
         }
-
-        // Kontaktlarni ko'rsatish
         function displayContacts() {
             const container = document.getElementById('contactsContainer');
             const loadingMessage = document.getElementById('loadingMessage');
@@ -259,14 +252,9 @@
                     </div>
                 </div>
             `).join('');
-
-            // Event listeners qo'shish
             addEventListeners();
         }
-
-        // Event listeners qo'shish
         function addEventListeners() {
-            // Status o'zgartirish
             document.querySelectorAll('.status-select').forEach(select => {
                 select.addEventListener('change', async (e) => {
                     const contactId = e.target.dataset.id;
@@ -274,8 +262,6 @@
                     await updateContactStatus(contactId, newStatus);
                 });
             });
-
-            // Kontaktni o'chirish
             document.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const contactId = e.target.closest('.delete-btn').dataset.id;
@@ -285,8 +271,6 @@
                 });
             });
         }
-
-        // Status matnini olish
         function getStatusText(status) {
             const statusTexts = {
                 'new': 'Yangi',
@@ -295,8 +279,6 @@
             };
             return statusTexts[status] || status;
         }
-
-        // Sanani formatlash
         function formatDate(dateString) {
             const date = new Date(dateString);
             return date.toLocaleDateString('uz-UZ') + ' ' + date.toLocaleTimeString('uz-UZ', { 
@@ -304,20 +286,15 @@
                 minute: '2-digit' 
             });
         }
-
-        // Statistikani yangilash
         function updateStatistics() {
             const total = contacts.length;
             const newCount = contacts.filter(c => c.status === 'new').length;
             const contactedCount = contacts.filter(c => c.status === 'contacted').length;
             const completedCount = contacts.filter(c => c.status === 'completed').length;
-
             document.getElementById('totalContacts').textContent = total;
             document.getElementById('newContacts').textContent = newCount;
             document.getElementById('contactedContacts').textContent = contactedCount;
             document.getElementById('completedContacts').textContent = completedCount;
-
-            // Yangi kontaktlar uchun notification
             const notificationBadge = document.getElementById('notificationBadge');
             if (newCount > 0) {
                 notificationBadge.classList.remove('hidden');
@@ -325,8 +302,6 @@
                 notificationBadge.classList.add('hidden');
             }
         }
-
-        // Kontakt statusini yangilash
         async function updateContactStatus(contactId, status) {
             try {
                 const response = await fetch(`/api/contacts/${contactId}/status`, {
@@ -340,7 +315,6 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    // Local ma'lumotlarni yangilash
                     const contactIndex = contacts.findIndex(c => c.id === contactId);
                     if (contactIndex !== -1) {
                         contacts[contactIndex].status = status;
@@ -366,7 +340,6 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    // Local ma'lumotlardan o'chirish
                     contacts = contacts.filter(c => c.id !== contactId);
                     displayContacts();
                     updateStatistics();
@@ -381,20 +354,13 @@
 
         // Xatolik xabarini ko'rsatish
         function showError(message) {
-            // Bu yerda toast notification yoki modal ko'rsatish mumkin
             alert(message);
         }
-
-        // Yangilash tugmasi
         document.getElementById('refreshBtn').addEventListener('click', () => {
             loadContacts();
         });
-
-        // Sahifa yuklanganda kontaktlarni yuklash
         document.addEventListener('DOMContentLoaded', () => {
             loadContacts();
-            
-            // Har 30 soniyada avtomatik yangilash
             setInterval(loadContacts, 30000);
         });
     </script>
